@@ -9,9 +9,11 @@ namespace Ambev.DeveloperEvaluation.ORM;
 public class DefaultContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Sale> Sales { get; set; }
 
     public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)
     {
+        Database.Migrate();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,8 +35,7 @@ public class YourDbContextFactory : IDesignTimeDbContextFactory<DefaultContext>
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         builder.UseNpgsql(
-               connectionString,
-               b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.WebApi")
+               connectionString
         );
 
         return new DefaultContext(builder.Options);
